@@ -27,8 +27,13 @@ def testLoop(j):
     
 def angleLoop(j):
     while True:
-        angle = float(input('Enter angle between 0 and 180: '))
+        angle = float(input('Enter angle between -35 and 55: '))
         j.moveAngle(angle)
+        
+def valueLoop(j):
+    while True:
+        value = float(input('Enter value between -1 and 1: '))
+        j.move(value)
 
 def positionsLoop(j):
     j.setToFourWay()
@@ -36,21 +41,23 @@ def positionsLoop(j):
     while True:
         if isFourWayEnabled == True:
             j.setToEightWay()
+            #j.moveMin()
         else:
             j.setToFourWay()
+            #j.moveMax()
         
         time.sleep(1)
         isFourWayEnabled = not isFourWayEnabled        
 
 try:
     jm = joystickmanager.JoystickManager(p1ServoGPIOPin, p2ServoGPIOPin)
-    jm.start()
 
     #testLoop(jm)
     #jm.moveAngle(81)
     #angleLoop(jm)
+    #valueLoop(jm)
     positionsLoop(jm)
-
-    jm.stop()
+    #jm.moveMin()
+    #jm.moveMax()
 except KeyboardInterrupt:
-    jm.stop()
+    pass # swallow the keyboard interrupt exception

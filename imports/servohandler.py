@@ -1,33 +1,33 @@
-import RPi.GPIO as GPIO
+# IMPORTANT: make sure pigpio deamon is running: 'sudo pigpiod'
+from gpiozero.pins.pigpio import PiGPIOFactory
+
+#from gpiozero import AngularServo
+from gpiozero import Servo
 import time
 from imports import constants
 
 class ServoHandler:
     def __init__(self, pin):
         self.pin = pin
-        GPIO.setup(pin, GPIO.OUT)
-        frequency = 50
-        self.servo = GPIO.PWM(pin, frequency)
+        
+        # create a custom pin-factory to fix servo jitter
+        # more info here: https://gpiozero.readthedocs.io/en/stable/api_output.html#servo
+        # and here: https://gpiozero.readthedocs.io/en/stable/api_pins.html
+        pigpio_factory = PiGPIOFactory()
+        
+        #self.servo = AngularServo(pin, pin_factory=pigpio_factory)
+        #self.servo = AngularServo(pin, min_angle=-35, max_angle=55, pin_factory=pigpio_factory)
+        self.servo = Servo(pin, pin_factory=pigpio_factory)
 
-    def start(self):
-        self.servo.start(0)
-
-    def move(self, duty):
-        self.servo.ChangeDutyCycle(duty)
-        time.sleep(0.5)
-        self.servo.ChangeDutyCycle(constants.STOP_CYCLE_VALUE)
-        #time.sleep(0.7)
+    def move(self, value):
+        # value must be -1 and 1
+        self.servo.value = value
         
     def moveAngle(self, angle):
-        # angle must be between 0 and 180
-        duty = constants.MIN_CYCLE_VALUE + (angle/18)
-        self.move(duty)
+        self.servo.angle = angle
         
     def moveMin(self):
-        self.move(constants.MIN_CYCLE_VALUE)
+        self.servo.min()
         
     def moveMax(self):
-        self.move(constants.MAX_CYCLE_VALUE)
-
-    def stop(self):
-        self.servo.stop()
+        self.servo.max()

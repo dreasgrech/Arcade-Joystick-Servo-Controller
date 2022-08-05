@@ -1,36 +1,31 @@
-import RPi.GPIO as GPIO
 from imports import servohandler
 
-EIGHT_WAY_ANGLE = 80.5
-FOUR_WAY_ANGLE = 35
+EIGHT_WAY_VALUE = -0.35
+FOUR_WAY_VALUE = 0.6
 
 class JoystickManager:
     def __init__(self, p1ServoPin, p2ServoPin):
-        GPIO.setmode(GPIO.BCM)
-
-        self.servoHandlers = [servohandler.ServoHandler(p1ServoPin), servohandler.ServoHandler(p2ServoPin)]
         #self.servoHandlers = [servohandler.ServoHandler(p1ServoPin)]
+        self.servoHandlers = [servohandler.ServoHandler(p1ServoPin), servohandler.ServoHandler(p2ServoPin)]
 
-    def start(self):
+    def move(self, value):
         for sh in self.servoHandlers:
-            sh.start()
-
-    def move(self, duty):
-        for sh in self.servoHandlers:
-            sh.move(duty)
+            sh.move(value)
             
     def moveAngle(self, angle):
         for sh in self.servoHandlers:
             sh.moveAngle(angle)
+    
+    def moveMin(self):
+        for sh in self.servoHandlers:
+            sh.moveMin()
+    
+    def moveMax(self):
+        for sh in self.servoHandlers:
+            sh.moveMax()
             
     def setToEightWay(self):
-        self.moveAngle(EIGHT_WAY_ANGLE)
+        self.move(EIGHT_WAY_VALUE)
         
     def setToFourWay(self):
-        self.moveAngle(FOUR_WAY_ANGLE)
-
-    def stop(self):
-        for sh in self.servoHandlers:
-            sh.stop()
-
-        GPIO.cleanup()
+        self.move(FOUR_WAY_VALUE)

@@ -1,3 +1,4 @@
+import time
 from imports import servohandler
 
 EIGHT_WAY_VALUE = -0.35
@@ -29,3 +30,22 @@ class JoystickManager:
         
     def setToFourWay(self):
         self.move(FOUR_WAY_VALUE)
+        
+    def positionsLoop(self):
+        self.setToFourWay()
+        isFourWayEnabled = True
+        while True:
+            if isFourWayEnabled == True:
+                self.setToEightWay()
+                #j.moveMin()
+            else:
+                self.setToFourWay()
+                #j.moveMax()
+            
+            time.sleep(1)
+            isFourWayEnabled = not isFourWayEnabled     
+            
+    def valueLoop(self):
+        while True:
+            value = float(input('Enter value between -1 and 1: '))
+            self.move(value)

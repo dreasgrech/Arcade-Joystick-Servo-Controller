@@ -2,8 +2,13 @@ import time
 from imports import constants
 from imports import joystickmanager
 
+from gpiozero import Button
+
 p1ServoGPIOPin = 12
 p2ServoGPIOPin = 13
+
+fourWayButtonPin = 20
+eightWayButtonPin = 21
 
 def testLoop(j):
     print("Starting loop")
@@ -51,13 +56,27 @@ def positionsLoop(j):
 
 try:
     jm = joystickmanager.JoystickManager(p1ServoGPIOPin, p2ServoGPIOPin)
+    
+    leftButton = Button(fourWayButtonPin)
+    #leftButton.wait_for_press()
+    leftButton.when_pressed = jm.setToFourWay
+    #print("left pressed")
+    
+    rightButton = Button(eightWayButtonPin)
+    #rightButton.wait_for_press()
+    rightButton.when_pressed = jm.setToEightWay
+    #print("right pressed")
+    
+    
 
     #testLoop(jm)
     #jm.moveAngle(81)
     #angleLoop(jm)
     #valueLoop(jm)
-    positionsLoop(jm)
+    #positionsLoop(jm)
     #jm.moveMin()
     #jm.moveMax()
 except KeyboardInterrupt:
+    leftButton.when_pressed = None
+    rightButton.when_pressed = None
     pass # swallow the keyboard interrupt exception

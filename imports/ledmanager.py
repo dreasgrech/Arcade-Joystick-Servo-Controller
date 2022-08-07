@@ -16,28 +16,30 @@ class LEDManager:
     
     def __init__(self, num_pixels, brightness, start_color):
         self.num_pixels = num_pixels
-        self.pixels = neopixel.NeoPixel(board.D18, num_pixels, brightness=brightness, auto_write=False, pixel_order=self.ORDER)
+        self.pixels = neopixel.NeoPixel(pin = board.D18, n = num_pixels, brightness=brightness, auto_write=False, pixel_order=self.ORDER)
         self.set_color(start_color) # Set the starting default color
          
-    def fade_to(self, new_color):
+    def fade_to(self, new_color, wait = 0.001):
         start_color = self.current_color
-        for t in np.arange(0, 1, 0.05):
+        for t in np.arange(0, 1, 0.01):
             color = self.__lerp_RGB(start_color, new_color, t)
             self.set_color(color)
-            time.sleep(0.05)
-        self.set_color(new_color) #set the final color after the loop
+            time.sleep(wait)
+        self.set_color(new_color) #Set the final color after the loop
         
     def set_color(self, rgb):
         self.pixels.fill(rgb)
         self.pixels.show()
-        self.current_color = rgb #Save a reference to the color we just set
+        self.current_color = rgb #Store a reference to the color we just set
         #print(rgb)
         
-    def rainbow_cycle(self, wait):
+    def rainbow_cycle(self, wait = 0.005):
         for j in range(255):
             for i in range(self.num_pixels):
                 pixel_index = (i * 256 // self.num_pixels) + j
-                self.pixels[i] = self.__wheel(pixel_index & 255)
+                c = self.__wheel(pixel_index & 255)
+                self.pixels[i] = c
+                self.current_color = c
             self.pixels.show()
             time.sleep(wait)
             
@@ -67,3 +69,7 @@ class LEDManager:
             g = int(pos * 3)
             b = int(255 - pos * 3)
         return (r, g, b) if self.ORDER in (neopixel.RGB, neopixel.GRB) else (r, g, b, 0)
+    
+    def dispose(self):
+        self.pixels.deinit()
+        

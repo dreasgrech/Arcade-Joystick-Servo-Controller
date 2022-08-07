@@ -8,7 +8,6 @@ from imports import constants
 
 class ServoHandler:
     def __init__(self, pin):
-        self.pin = pin
         
         # create a custom pin-factory to fix servo jitter
         # more info here: https://gpiozero.readthedocs.io/en/stable/api_output.html#servo
@@ -19,8 +18,7 @@ class ServoHandler:
         #self.servo = AngularServo(pin, min_angle=-35, max_angle=55, pin_factory=pigpio_factory)
         self.servo = Servo(pin, pin_factory=pigpio_factory)
 
-    def move(self, value):
-        # value must be -1 and 1
+    def move(self, value): # value must be -1 and 1
         self.servo.value = value
         
     def move_min(self):
@@ -28,3 +26,6 @@ class ServoHandler:
         
     def move_max(self):
         self.servo.max()
+        
+    def dispose(self):
+        self.servo.close()

@@ -15,11 +15,11 @@ class JoystickManager:
             
     def move_min(self):
         for sh in self.servo_handlers:
-            sh.moveMin()
+            sh.move_min()
     
     def move_max(self):
         for sh in self.servo_handlers:
-            sh.moveMax()
+            sh.move_max()
             
     def set_to_eight_way(self):
         self.move(EIGHT_WAY_VALUE)
@@ -43,3 +43,7 @@ class JoystickManager:
         while True:
             value = float(input('Enter value between -1 and 1: '))
             self.move(value)
+            
+    def dispose(self):
+        for sh in self.servo_handlers:
+            sh.dispose()

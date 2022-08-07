@@ -12,5 +12,6 @@ class ButtonManager:
 
     def dispose(self):
         self.four_way_button.when_pressed = None
+        self.four_way_button.close()
         self.eight_way_button.when_pressed = None
-        print("disposed")
+        self.eight_way_button.close()

@@ -1,48 +1,46 @@
-import time
-from imports import constants
 from imports import enums
 from imports import joystickmanager
 from imports import ledmanager
 from imports import buttonmanager
 
 # PINS
-p1ServoGPIOPin = 12
-p2ServoGPIOPin = 13
+p1_servo_GPIO_pin = 12
+p2_servo_GPIO_pin = 13
 
-fourWayButtonPin = 20
-eightWayButtonPin = 21
-
-ledPin = 18
+four_way_button_pin = 20
+eight_way_button_pin = 21
 
 # COLORS
-fourWayButtonColor = (255, 0, 0)
-eightWayButtonColor = (0, 0, 255)
+four_way_button_color = (255, 0, 0)
+eight_way_button_color = (255, 255, 0)
 
-# GLOBALS
-currentState = None
+current_state = enums.JoysticksState.NOTHING
 
-def changeState(newState, stateFunction, stateColor):
-    global currentState
-    if currentState == newState:
+def change_state(new_state, state_function, state_color):
+    global current_state
+    if current_state == new_state:
         return
-    stateFunction()
-    ledManager.rainbow_cycle(0.001)
-    ledManager.setRGBColor(stateColor)
-    currentState = newState
+    state_function()
+    #ledManager.rainbow_cycle(0.001)
+    led_manager.fade_to(state_color)
+    current_state = new_state
     
-def onFourWayButtonPressed():
-    changeState(enums.JoysticksState.FourWay, joystickManager.setToFourWay, fourWayButtonColor)
+def on_four_way_button_pressed():
+    change_state(enums.JoysticksState.FOUR_WAY, joystick_manager.set_to_four_way, four_way_button_color)
     
-def onEightWayButtonPressed():
-    changeState(enums.JoysticksState.EightWay, joystickManager.setToEightWay, eightWayButtonColor)
+def on_eight_way_button_pressed():
+    change_state(enums.JoysticksState.EIGHT_WAY, joystick_manager.set_to_eight_way, eight_way_button_color)
  
 try:
-    joystickManager = joystickmanager.JoystickManager(p1ServoGPIOPin, p2ServoGPIOPin)
-    ledManager = ledmanager.LEDManager(1, 1)
-    buttonManager = buttonmanager.ButtonManager(fourWayButtonPin, onFourWayButtonPressed, eightWayButtonPin, onEightWayButtonPressed)
+    joystick_manager = joystickmanager.JoystickManager(p1_servo_GPIO_pin, p2_servo_GPIO_pin)
+    led_manager = ledmanager.LEDManager(1, 1, start_color = four_way_button_color)
+    button_manager = buttonmanager.ButtonManager(four_way_button_pin, on_four_way_button_pressed, eight_way_button_pin, on_eight_way_button_pressed)
     
-    onFourWayButtonPressed()
+    on_four_way_button_pressed()
+    
+    #ledManager.lerp(fourWayButtonColor, (0, 255, 0))
+    #ledManager.fadeTo((0, 255, 0))
 
 except KeyboardInterrupt:
-    buttonManager.dispose()
+    button_manager.dispose()
     pass # swallow the keyboard interrupt exception

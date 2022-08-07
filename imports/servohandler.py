@@ -23,11 +23,8 @@ class ServoHandler:
         # value must be -1 and 1
         self.servo.value = value
         
-    def moveAngle(self, angle):
-        self.servo.angle = angle
-        
-    def moveMin(self):
+    def move_min(self):
         self.servo.min()
         
-    def moveMax(self):
+    def move_max(self):
         self.servo.max()

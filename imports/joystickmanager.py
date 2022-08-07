@@ -5,47 +5,41 @@ EIGHT_WAY_VALUE = -0.35
 FOUR_WAY_VALUE = 0.6
 
 class JoystickManager:
-    def __init__(self, p1ServoPin, p2ServoPin):
-        #self.servoHandlers = [servohandler.ServoHandler(p1ServoPin)]
-        self.servoHandlers = [servohandler.ServoHandler(p1ServoPin), servohandler.ServoHandler(p2ServoPin)]
+    def __init__(self, p1_servo_pin, p2_servo_pin):
+        #self.servo_handlers = [servohandler.ServoHandler(p1_servo_pin)]
+        self.servo_handlers = [servohandler.ServoHandler(p1_servo_pin), servohandler.ServoHandler(p2_servo_pin)]
 
     def move(self, value):
-        for sh in self.servoHandlers:
+        for sh in self.servo_handlers:
             sh.move(value)
             
-    def moveAngle(self, angle):
-        for sh in self.servoHandlers:
-            sh.moveAngle(angle)
-    
-    def moveMin(self):
-        for sh in self.servoHandlers:
+    def move_min(self):
+        for sh in self.servo_handlers:
             sh.moveMin()
     
-    def moveMax(self):
-        for sh in self.servoHandlers:
+    def move_max(self):
+        for sh in self.servo_handlers:
             sh.moveMax()
             
-    def setToEightWay(self):
+    def set_to_eight_way(self):
         self.move(EIGHT_WAY_VALUE)
         
-    def setToFourWay(self):
+    def set_to_four_way(self):
         self.move(FOUR_WAY_VALUE)
         
-    def positionsLoop(self):
-        self.setToFourWay()
-        isFourWayEnabled = True
+    def positions_loop(self):
+        self.set_to_four_way()
+        is_four_way_enabled = True
         while True:
-            if isFourWayEnabled == True:
-                self.setToEightWay()
-                #j.moveMin()
+            if is_four_way_enabled == True:
+                self.set_to_eight_way()
             else:
-                self.setToFourWay()
-                #j.moveMax()
+                self.set_to_four_way()
             
             time.sleep(1)
-            isFourWayEnabled = not isFourWayEnabled     
+            is_four_way_enabled = not is_four_way_enabled     
             
-    def valueLoop(self):
+    def value_loop(self):
         while True:
             value = float(input('Enter value between -1 and 1: '))
             self.move(value)

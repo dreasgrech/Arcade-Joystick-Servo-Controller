@@ -32,6 +32,9 @@ class LEDManager:
         self.pixels.show()
         self.current_color = rgb #Store a reference to the color we just set
         #print(rgb)
+    
+    def fade_to_off(self, wait = 0.001):
+        self.fade_to((0,0,0), wait)
         
     def rainbow_cycle(self, wait = 0.005):
         for j in range(255):

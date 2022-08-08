@@ -1,1 +1,1 @@
-__all__ = ["servohandler", "joystickmanager", "ledmanager", "buttonmanager", "constants", "enums"]
+__all__ = ["servohandler", "joystickmanager", "ledmanager", "buttonmanager", "logmanager", "osmanager", "constants", "enums"]
